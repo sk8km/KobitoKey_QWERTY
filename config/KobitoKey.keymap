@@ -1,5 +1,6 @@
 #include <input/processors.dtsi>
 #include <behaviors.dtsi>
+#include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/pointing.h>
 
@@ -33,11 +34,32 @@
     };
 
     macros {
-        new_macro2: new_macro {
+        macro2: new_macro {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
             bindings = <&kp RC(UP) &kp HOME>;
             label = "NEW_MACRO";
+        };
+
+        macro3: macro2 {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp LC(DOWN_ARROW) &kp END>;
+            label = "MACRO2";
+        };
+
+        macro0: macro0 {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp RCTRL &kp RIGHT_SHIFT &kp RIGHT_ALT &kp RIGHT>;
+            label = "MACRO0";
+        };
+
+        macro1: macro1 {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp LCTRL &kp RIGHT_SHIFT &kp RIGHT_ALT &kp LEFT>;
+            label = "MACRO1";
         };
     };
 
@@ -48,7 +70,7 @@
             bindings = <
 &kp Q             &kp W     &kp E      &kp R        &lt 3 T      &kp Y      &kp U            &kp I      &kp O      &kp P
 &mt LEFT_SHIFT A  &kp S     &kp D      &kp F        &kp G        &kp H      &kp J            &kp K      &kp L      &mt RIGHT_SHIFT DEL
-&mt LCTRL Z       &kp X     &kp C      &lt 3 V      &kp B        &kp N      &lt 3 M          &mkp MB1   &mkp MB2   &mt SLASH RIGHT_CONTROL
+&mt LCTRL Z       &kp X     &kp C      &lt 3 V      &kp B        &kp N      &lt 3 M          &mkp MB1   &mkp MB2   &mt RIGHT_CONTROL SLASH
 &kp LSHFT         &kp LALT  &kp LANG2  &lt 1 SPACE  &lt 2 ENTER  &lt 2 TAB  &lt 1 BACKSPACE  &kp GRAVE  &kp RSHFT  &kp RIGHT_ALT
             >;
         };
@@ -56,30 +78,30 @@
         layer1 {
             label = "NUMBER";
             bindings = <
-&kp F12           &kp N7        &kp N8        &kp N9        &kp LEFT_ALT  &kp RC(W)  &kp HOME   &kp UP       &kp END        &new_macro2
+&kp F12           &kp N7        &kp N8        &kp N9        &kp LEFT_ALT  &kp RC(W)  &kp HOME   &kp UP       &kp END        &macro2
 &kp LEFT_SHIFT    &kp N4        &kp N5        &kp N6        &kp COMMA     &kp RC(L)  &kp LEFT   &kp DOWN     &kp RIGHT      &trans
-&kp NUMBER_0      &kp NUMBER_1  &kp NUMBER_2  &kp NUMBER_3  &kp DOT       &kp RC(C)  &kp RC(V)  &kp PAGE_UP  &kp PAGE_DOWN  &kp RS(RC(EQUAL))
-&kp LEFT_CONTROL  &trans        &trans        &trans        &trans        &trans     &trans     &trans       &trans         &kp RC(MINUS)
+&kp NUMBER_0      &kp NUMBER_1  &kp NUMBER_2  &kp NUMBER_3  &kp DOT       &kp RC(C)  &kp RC(V)  &kp PAGE_UP  &kp PAGE_DOWN  &kp RS(RC(SEMI))
+&kp LEFT_CONTROL  &trans        &trans        &trans        &kp LCMD      &trans     &trans     &trans       &trans         &kp RC(MINUS)
             >;
         };
 
         layer2 {
             label = "FUNCTION";
             bindings = <
-&kp LS(LBKT)           &kp LS(NUMBER_7)  &kp LS(NUMBER_8)  &kp LS(N9)        &kp LS(COMMA)         &kp LS(MINUS)            &kp MINUS     &kp EQUAL  &kp RS(EQUAL)     &kp RS(INT_RO)
-&kp LS(RIGHT_BRACKET)  &kp LS(NUMBER_4)  &kp LS(NUMBER_5)  &kp LS(NUMBER_6)  &kp LS(DOT)           &kp LS(INTERNATIONAL_3)  &kp LBKT      &kp RBKT   &kp BACKSLASH     &kp RIGHT_SHIFT
-&kp LS(BACKSLASH)      &kp LS(NUMBER_1)  &kp LS(NUMBER_2)  &kp LS(NUMBER_3)  &kp LS(SINGLE_QUOTE)  &kp SEMI                 &kp RS(FSLH)  &kp BSLH   &kp SINGLE_QUOTE  &kp RIGHT_CONTROL
-&kp LS(SEMICOLON)      &trans            &trans            &trans            &trans                &trans                   &trans        &trans     &trans            &trans
+&kp LS(LBKT)           &kp LS(NUMBER_7)  &kp LS(NUMBER_8)  &kp LS(N9)        &kp LS(COMMA)         &kp LS(MINUS)            &kp MINUS     &kp EQUAL            &kp RS(EQUAL)     &kp RS(INT_RO)
+&kp LS(RIGHT_BRACKET)  &kp LS(NUMBER_4)  &kp LS(NUMBER_5)  &kp LS(NUMBER_6)  &kp LS(DOT)           &kp LS(INTERNATIONAL_3)  &kp LBKT      &kp RBKT             &kp BACKSLASH     &kp RIGHT_SHIFT
+&kp LS(BACKSLASH)      &kp LS(NUMBER_1)  &kp LS(NUMBER_2)  &kp LS(NUMBER_3)  &kp LS(SINGLE_QUOTE)  &kp SEMI                 &kp RS(FSLH)  &kp INTERNATIONAL_3  &kp SINGLE_QUOTE  &kp RIGHT_CONTROL
+&kp LS(SEMICOLON)      &trans            &trans            &trans            &trans                &trans                   &trans        &trans               &trans            &trans
             >;
         };
 
         layer3 {
             label = "MOUSE";
             bindings = <
-&trans  &trans    &trans    &kp B           &kp C_VOL_UP  &kp RS(RC(T))    &trans             &trans             &kp F2           &kp F11
-&trans  &trans    &trans    &trans          &kp C_VOL_DN  &trans           &trans             &trans             &kp RIGHT_SHIFT  &kp F10
-&trans  &mkp MB2  &mkp MB1  &trans          &trans        &kp RC(PAGE_UP)  &kp RC(PAGE_DOWN)  &kp RIGHT_CONTROL  &kp F5           &kp F7
-&trans  &trans    &trans    &kp LANGUAGE_2  &kp F4        &kp GRAVE        &kp LANGUAGE_1     &trans             &to 0            &kp RALT
+&bt BT_SEL 0    &bt BT_SEL 1  &bt BT_SEL 3  &kp B           &kp C_VOL_UP  &kp RS(RC(T))    &trans             &trans             &kp F2           &kp F11
+&trans          &trans        &trans        &trans          &kp C_VOL_DN  &trans           &macro1            &macro0            &kp RIGHT_SHIFT  &kp F10
+&trans          &mkp MB2      &mkp MB1      &trans          &trans        &kp RC(PAGE_UP)  &kp RC(PAGE_DOWN)  &kp RIGHT_CONTROL  &kp F5           &kp F7
+&bt BT_CLR_ALL  &bt BT_CLR    &trans        &kp LANGUAGE_2  &kp LA(F4)    &kp GRAVE        &kp LANGUAGE_1     &trans             &to 0            &kp RALT
             >;
         };
     };
