@@ -60,11 +60,11 @@
 
 &tb_right_listener {
     status = "okay";
+    device = <&tb_right_split>;
 
     /* 通常：カーソル */
     input-processors =
-        <&sensor_rotation_right>,
-        <&zip_xy_transform INPUT_TRANSFORM_Y_INVERT>;
+        <&sensor_rotation_right>;
 
     /* layer3：スクロール */
     layer3_scroll {
