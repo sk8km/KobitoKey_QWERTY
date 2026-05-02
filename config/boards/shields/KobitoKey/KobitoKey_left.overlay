@@ -70,10 +70,19 @@
             <&sensor_rotation_left>,
             <&zip_x_scaler 0 1>,
             <&zip_y_scaler 1 15>,
-            <&zip_xy_to_scroll_mapper>,
+            /* <&zip_xy_to_scroll_mapper>, */
+            &zip_xy_to_scroll_mapper_layer0,
             <&zip_scroll_transform INPUT_TRANSFORM_Y_INVERT>,
             <&zip_scroll_transform INPUT_TRANSFORM_X_INVERT>;
     };
+
+/ {
+    zip_xy_to_scroll_mapper_layer0: zip_xy_to_scroll_mapper_layer0 {
+        compatible = "zmk,input-processor-list";
+        input-processors = <&zip_xy_to_scroll_mapper>;
+        layers = <0>;  /* ← ここがキモ */
+    };
+};
 
 / {
   /omit-if-no-ref/ zip_temp_layer: zip_temp_layer {
