@@ -37,7 +37,7 @@
         reg = <0>;
         spi-max-frequency = <2000000>;
         irq-gpios = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
-        cpi = <200>; /* センサー感度 */
+        cpi = <600>; /* センサー感度 */
 
 
         evt-type = <INPUT_EV_REL>;
@@ -69,7 +69,7 @@
     input-processors =
             <&sensor_rotation_left>,
             <&zip_x_scaler 0 1>,
-            <&zip_y_scaler 1 15>,
+            <&zip_y_scaler 1 50>,
             <&zip_xy_to_scroll_mapper>,
             <&zip_scroll_transform INPUT_TRANSFORM_Y_INVERT>,
             <&zip_scroll_transform INPUT_TRANSFORM_X_INVERT>;
@@ -79,8 +79,7 @@
         layers = <3>;
         input-processors =
             <&sensor_rotation_left>,
-            <&zip_x_scaler 0 1>,
-            <&zip_y_scaler 1 15>;
+            <&zip_scroll_transform INPUT_TRANSFORM_Y_INVERT>;
         };
     };
 
