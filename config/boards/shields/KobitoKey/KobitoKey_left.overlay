@@ -79,6 +79,7 @@
 / {
     zip_xy_to_scroll_mapper_layer0: zip_xy_to_scroll_mapper_layer0 {
         compatible = "zmk,input-processor-list";
+        #input-processor-cells = <0>;
         input-processors = <&zip_xy_to_scroll_mapper>;
         layers = <0>;  /* ← ここがキモ */
     };
