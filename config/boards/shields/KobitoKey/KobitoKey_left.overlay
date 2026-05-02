@@ -77,19 +77,19 @@
     normal_mode: normal_mode {
         compatible = "zmk,input-processor-list";
         input-processors =
-            <&zip_x_scaler 0 1>,
-            <&zip_y_scaler 1 15>,
-            <&zip_xy_to_scroll_mapper>, /* ← スクロール化 */
-            <&zip_scroll_transform INPUT_TRANSFORM_Y_INVERT>,
-            <&zip_scroll_transform INPUT_TRANSFORM_X_INVERT>;
+            <&zip_x_scaler 0 1
+             &zip_y_scaler 1 15
+             &zip_xy_to_scroll_mapper /* ← スクロール化 */
+             &zip_scroll_transform INPUT_TRANSFORM_Y_INVERT
+             &zip_scroll_transform INPUT_TRANSFORM_X_INVERT>;
     };
 
     /* layer3のとき（スクロールを外す＝カーソルになる） */
     swap_mode: swap_mode {
         compatible = "zmk,input-processor-list";
         input-processors =
-            <&zip_x_scaler 0 1>,
-            <&zip_y_scaler 1 15>;
+            <&zip_x_scaler 0 1
+             &zip_y_scaler 1 15>;
             /* ← scroll mapperが無いのでカーソル動作 */
     };
 };
@@ -102,8 +102,8 @@
     device = <&tb_left>;
 
     input-processors =
-        <&sensor_rotation_left>, /* 向き補正はそのまま */
-        <&tb_swap_cond>;         /* ← ここでlayer条件分岐 */
+        <&sensor_rotation_left /* 向き補正はそのまま */
+         &tb_swap_cond>;         /* ← ここでlayer条件分岐 */
 };
 
 /* ================================
