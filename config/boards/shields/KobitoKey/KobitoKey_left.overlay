@@ -79,7 +79,7 @@
         input-processors =
             <&zip_x_scaler 0 1
              &zip_y_scaler 1 15
-             &zip_xy_to_scroll_mapper /* ← スクロール化 */
+             &zip_xy_to_scroll_mapper
              &zip_scroll_transform INPUT_TRANSFORM_Y_INVERT
              &zip_scroll_transform INPUT_TRANSFORM_X_INVERT>;
     };
@@ -102,7 +102,7 @@
     device = <&tb_left>;
 
     input-processors =
-        <&sensor_rotation_left /* 向き補正はそのまま */
+        <&sensor_rotation_left
          &tb_swap_cond>;         /* ← ここでlayer条件分岐 */
 };
 
