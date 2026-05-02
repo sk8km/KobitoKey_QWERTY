@@ -61,6 +61,7 @@
 &tb_right_listener {
     status = "okay";
     device = <&tb_right>;
+    input = <&tb_right>;
 
     /* 通常：カーソル */
     input-processors =
