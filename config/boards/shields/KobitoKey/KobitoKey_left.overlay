@@ -37,7 +37,8 @@
         reg = <0>;
         spi-max-frequency = <2000000>;
         irq-gpios = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
-        cpi = <200>;
+        cpi = <200>; /* センサー感度 */
+
 
         evt-type = <INPUT_EV_REL>;
         x-input-code = <INPUT_REL_X>;
@@ -45,7 +46,7 @@
     };
 };
 
- / {
+/ {
     sensor_rotation_left: sensor-rotation-left {
         compatible = "zmk,input-processor-sensor-rotation";
         status = "okay";
@@ -59,37 +60,6 @@
         status = "okay";
         rotation-angle = <24>;
     };
-
-    tb_swap_cond: tb_swap_cond {
-        compatible = "zmk,input-processor-conditional";
-        #input-processor-cells = <0>;
-        if-layers = <3>;
-        then = <&swap_mode>;
-        else = <&normal_mode>;
-    };
-
-    normal_mode: normal_mode {
-        compatible = "zmk,input-processor-list";
-        input-processors =
-            <&zip_x_scaler 0 1
-             &zip_y_scaler 1 15
-             &zip_xy_to_scroll_mapper
-             &zip_scroll_transform INPUT_TRANSFORM_Y_INVERT
-             &zip_scroll_transform INPUT_TRANSFORM_X_INVERT>;
-    };
-
-    swap_mode: swap_mode {
-        compatible = "zmk,input-processor-list";
-        input-processors =
-            <&zip_x_scaler 0 1
-             &zip_y_scaler 1 15>;
-    };
-
-    /omit-if-no-ref/ zip_temp_layer: zip_temp_layer {
-        compatible = "zmk,input-processor-temp-layer";
-        #input-processor-cells = <2>;
-        require-prior-idle-ms = <350>;
-    };
 };
 
 &tb_left_listener {
@@ -97,8 +67,20 @@
     device = <&tb_left>;
 
     input-processors =
-        <&sensor_rotation_left
-         &tb_swap_cond>;
+            <&sensor_rotation_left>,
+            <&zip_x_scaler 0 1>,
+            <&zip_y_scaler 1 15>,
+            <&zip_xy_to_scroll_mapper>,
+            <&zip_scroll_transform INPUT_TRANSFORM_Y_INVERT>,
+            <&zip_scroll_transform INPUT_TRANSFORM_X_INVERT>;
+    };
+
+/ {
+  /omit-if-no-ref/ zip_temp_layer: zip_temp_layer {
+    compatible = "zmk,input-processor-temp-layer";
+    #input-processor-cells = <2>;
+    require-prior-idle-ms = <350>; /* キー押下後、何msオートマウスレイヤに入らないようにするか、誤爆防止 */
+  };
 };
 
 &tb_right_listener {
@@ -106,6 +88,7 @@
 
     input-processors =
         <&sensor_rotation_right>;
+        /*<&zip_temp_layer 3 5000>;*/ /* オートマウスレイヤーの指定とトラボ操作及びマウスボタン押下後に滞留する時間 */
 };
 
 &zip_temp_layer {
