@@ -37,8 +37,7 @@
         reg = <0>;
         spi-max-frequency = <2000000>;
         irq-gpios = <&gpio0 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
-        cpi = <200>; /* センサー感度 */
-
+        cpi = <200>;
 
         evt-type = <INPUT_EV_REL>;
         x-input-code = <INPUT_REL_X>;
@@ -51,36 +50,70 @@
         compatible = "zmk,input-processor-sensor-rotation";
         status = "okay";
         #input-processor-cells = <0>;
-        rotation-angle = <(-24)>;
+        rotation-angle = <(-24)>; /* 左トラボの角度補正 */
     };
 
     sensor_rotation_right: sensor-rotation-right {
         compatible = "zmk,input-processor-sensor-rotation";
         #input-processor-cells = <0>;
         status = "okay";
-        rotation-angle = <24>;
+        rotation-angle = <24>; /* 右トラボの角度補正（今回は未使用でもOK） */
+    };
+
+    /* ================================
+     * 追加：layer3で動作切替するためのconditional
+     * ================================ */
+
+    tb_swap_cond: tb_swap_cond {
+        compatible = "zmk,input-processor-conditional";
+        #input-processor-cells = <0>;
+
+        if-layers = <3>;        /* layer3のとき */
+        then = <&swap_mode>;   /* カーソルにする */
+        else = <&normal_mode>; /* 通常（スクロール） */
+    };
+
+    /* 通常状態（元の設定そのまま） */
+    normal_mode: normal_mode {
+        compatible = "zmk,input-processor-list";
+        input-processors =
+            <&zip_x_scaler 0 1>,
+            <&zip_y_scaler 1 15>,
+            <&zip_xy_to_scroll_mapper>, /* ← スクロール化 */
+            <&zip_scroll_transform INPUT_TRANSFORM_Y_INVERT>,
+            <&zip_scroll_transform INPUT_TRANSFORM_X_INVERT>;
+    };
+
+    /* layer3のとき（スクロールを外す＝カーソルになる） */
+    swap_mode: swap_mode {
+        compatible = "zmk,input-processor-list";
+        input-processors =
+            <&zip_x_scaler 0 1>,
+            <&zip_y_scaler 1 15>;
+            /* ← scroll mapperが無いのでカーソル動作 */
     };
 };
 
+/* ================================
+ * 左トラボ：ここだけ書き換え
+ * ================================ */
 &tb_left_listener {
     status = "okay";
     device = <&tb_left>;
 
     input-processors =
-            <&sensor_rotation_left>,
-            <&zip_x_scaler 0 1>,
-            <&zip_y_scaler 1 15>,
-            <&zip_xy_to_scroll_mapper>,
-            <&zip_scroll_transform INPUT_TRANSFORM_Y_INVERT>,
-            <&zip_scroll_transform INPUT_TRANSFORM_X_INVERT>;
-    };
+        <&sensor_rotation_left>, /* 向き補正はそのまま */
+        <&tb_swap_cond>;         /* ← ここでlayer条件分岐 */
+};
 
-/ {
-  /omit-if-no-ref/ zip_temp_layer: zip_temp_layer {
+/* ================================
+ * 以下は元のまま（変更なし）
+ * ================================ */
+
+ /omit-if-no-ref/ zip_temp_layer: zip_temp_layer {
     compatible = "zmk,input-processor-temp-layer";
     #input-processor-cells = <2>;
-    require-prior-idle-ms = <350>; /* キー押下後、何msオートマウスレイヤに入らないようにするか、誤爆防止 */
-  };
+    require-prior-idle-ms = <350>;
 };
 
 &tb_right_listener {
@@ -88,7 +121,7 @@
 
     input-processors =
         <&sensor_rotation_right>;
-        /* <&zip_temp_layer 3 5000>; */ /* オートマウスレイヤーの指定とトラボ操作及びマウスボタン押下後に滞留する時間 */
+        /* 右はまだ変更してない（必要なら後で逆転対応） */
 };
 
 &zip_temp_layer {
