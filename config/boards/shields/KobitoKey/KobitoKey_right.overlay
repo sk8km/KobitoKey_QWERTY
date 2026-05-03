@@ -60,10 +60,11 @@
     status = "okay";
     device = <&tb_right_split>;
 
-    /* ベース無し */
-    input-processors = <>;
+    /* ベース（必須） */
+    input-processors =
+        <&sensor_rotation_right>;
 
-    /* 通常：カーソル */
+    /* layer0：カーソル */
     layer0_cursor {
         layers = <0>;
         input-processors =
