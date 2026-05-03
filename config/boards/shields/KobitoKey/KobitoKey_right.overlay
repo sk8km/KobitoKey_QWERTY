@@ -2,15 +2,6 @@
 #include "kobitokey.dtsi"
 #include <input/processors.dtsi>
 
-/ {
-    sensor_rotation_right: sensor-rotation-right {
-        compatible = "zmk,input-processor-sensor-rotation";
-        #input-processor-cells = <0>;
-        status = "okay";
-        rotation-angle = <24>;
-    };
-};
-
 /* 列オフセット */
 &default_transform { col-offset = <5>; };
 
@@ -53,25 +44,4 @@
 &tb_right_split {
     device = <&tb_right>;
     input-processors = <&zip_xy_transform INPUT_TRANSFORM_Y_INVERT>;
-};
-
-&tb_right_listener {
-    status = "okay";
-    device = <&tb_right_split>;
-
-    /* 共通ベース */
-    input-processors =
-        <&sensor_rotation_right>;
-
-    /* layer3：スクロール */
-    layer3_scroll {
-        layers = <3>;
-        input-processors =
-            <&sensor_rotation_right>,
-            <&zip_x_scaler 0 1>,
-            <&zip_y_scaler 1 50>,
-            <&zip_xy_to_scroll_mapper>,
-            <&zip_scroll_transform INPUT_TRANSFORM_Y_INVERT>,
-            <&zip_scroll_transform INPUT_TRANSFORM_X_INVERT>;
-    };
 };
