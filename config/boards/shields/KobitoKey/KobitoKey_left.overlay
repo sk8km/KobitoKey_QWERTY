@@ -88,7 +88,7 @@
 
     input-processors =
         <&sensor_rotation_right>,
-        <&zip_xy_transform INPUT_TRANSFORM_Y_INVERT>;
+        <&zip_scroll_transform INPUT_TRANSFORM_Y_INVERT>;
 
     layer3_scroll {
         layers = <3>;
