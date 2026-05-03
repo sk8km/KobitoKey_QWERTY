@@ -60,9 +60,15 @@
     status = "okay";
     device = <&tb_right_split>;
 
-    /* 共通ベース */
-    input-processors =
-        <&sensor_rotation_right>;
+    /* ベース無し */
+    input-processors = <>;
+
+    /* 通常：カーソル */
+    layer0_cursor {
+        layers = <0>;
+        input-processors =
+            <&sensor_rotation_right>;
+    };
 
     /* layer3：スクロール */
     layer3_scroll {
